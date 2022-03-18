@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Главная
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-5">
+    <h1>Это мой блог!</h1>
+    <h3>
+        {% if current_user.is_authenticated %}
+        Привет, {{ current_user.username }}!
+        {% endif %}
+    </h3>
+
+    {% for el in posts %}
+    {% if el.is_pinned %}
+        <div class="alert alert-info">
+          <h2>{{ el.title }}</h2>
+          <h2>{{ el.intro }}</h2>
+          <p><b>Дата: {{ el.date.strftime('%Y/%m/%d %H:%M') }}</b></p>
+          <p><b>Автор: <span style="color: {{ el.author.roleColor }};">{{ el.author.username }}</span></b></p>
+          <a class="btn btn-warning" href="/blog/{{ el.id }}">Читать</a>
+        </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="alert alert-info">
+      <h2>{{ current.title }}</h2>
+      <h2>{{ current.intro }}</h2>
+      <p>{{ current.text }}</p>
+      <p><b>Дата: {{ current.date.date() }}</b></p>
+      <p><b>Автор: <span style="color: {{ current.author.roleColor }};">{{ current.author.username }}</span></b></p>
+      {% if current_user.is_authenticated and (current_user == current.author or current_user.role == 1) %}
+        <a class="btn btn-danger" href="/blog/{{ current.id }}/remove">Удалить</a>
+        <a class="btn btn-success" href="/blog/{{ current.id }}/update">Изменить</a>
+        {% if not current.is_pinned and current_user.role == 1 %}
+        <a class="btn btn-success" href="/blog/{{ current.id }}/pin/1">Закрепить</a>
+        {% elif current.is_pinned and current_user.role == 1 %}
+        <a class="btn btn-danger" href="/blog/{{ current.id }}/pin/0">Открепить</a>
+        {% endif %}
+      {% endif %}
+      <a class="btn btn-warning" href="/blog">Назад</a>
+    </div>
+  <!-- здесь форма для коммента -->
+
+  {% if current_user.is_authenticated %}
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.text(size=64, class="form-control", placeholder="Введите комментарий") }}
+    </p>
+
+    <p>{{ form.submit(class="btn btn-success") }}</p>
+  </form>
+  {% endif %}
+  {% for error in form.text.errors %}
+	<span style="color: red;">{{ error  }}</span>
+  {% endfor %}
+  {% for comment in current.comments %}
+    <div class="alert alert-danger">
+      <p><b><span style="color: {{comment.author.roleColor}};">{{ comment.author.username }}</span></b></p>
+      <p>{{ comment.text }}</p>
+      <p><b>Дата: {{ comment.date.strftime('%Y/%m/%d %H:%M')}} </b></p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+  <h1>Добавление статьи</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.title(size=64, class="form-control", placeholder="Введите заголовок") }}
+    </p>
+    {% for error in form.title.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    <p>
+      {{ form.intro(size=256, class="form-control", placeholder="Введите интро") }}
+    </p>
+    {% for error in form.intro.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    <p>
+      {{ form.text(class="form-control", placeholder="Введите текст статьи") }}
+    </p>
+	
+    {% for error in form.text.errors %}
+    <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    <p>{{ form.submit(class="btn btn-success") }}</p>
+  </form>
+</div>
+{% endblock %}

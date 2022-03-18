@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+
+<style type="text/css">
+ #chatborder {
+  border-style: solid;
+  background-color: #f6f9f6;
+  border-width: 3px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-right: 20px;
+  padding-left: 15px;
+  border-radius: 15px;
+}
+#chatbox {
+  font: 17px arial, sans-serif;
+  height: 22px;
+  width: 80%;
+}
+
+li {
+  list-style-type: none;
+}
+</style>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+
+	var socket = io.connect();
+	
+ 	var block = document.getElementById("messages");
+	
+ 	 block.scrollTop = block.scrollHeight;
+	socket.on('connect', function() {
+		console.log('User has connected!');
+	});
+
+	socket.on("connect_error", (err) => {
+      		console.log(`connect_error due to ${err.message}`);
+	});
+
+	socket.on('message', function(msg) {
+		$("#messages").append('<li>'+msg+'</li>');
+		console.log('Received message');
+ 		block.scrollTop = block.scrollHeight;
+	});
+
+	$('#sendbutton').on('click', function() {
+		var text = $('#myMessage').val();
+		socket.send(text);
+		console.log('Send was clicked! ' + text);
+		$('#myMessage').val('');
+		
+	});
+
+ 
+
+
+});
+</script>
+<div class="container mt-5">
+  <h1>Чат</h1>
+  {% if not current_user.is_authenticated%}
+  <h5>Для общения в чате, пожалуйста, войдите или зарегистрируйтесь :)</h5>
+  {% endif %}
+  <div id='chatborder'>
+    <ul id="messages" style="overflow-y: scroll; height: 200px; width: 1000px;">
+      {% for message in messages %}
+        <li><span style="color:{{ message.author.roleColor }};"> {{ message.author.username }}</span>: {{ message.text }}</li>
+      {% endfor %}
+    </ul>
+    {% if current_user.is_authenticated %}
+  <input type="text" name="chat" id="myMessage" placeholder="Hi there! Type here to talk here." maxlength="255" required>
+   <button class="btn btn-warning" id="sendbutton">Send!</button>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

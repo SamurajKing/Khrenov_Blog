@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+  <h1>Все статьи</h1>
+  {% for el in posts %}
+    <div class="alert alert-info">
+      <h2>{{ el.title }}</h2>
+      <h2>{{ el.intro }}</h2>
+      <p><b>Дата: {{ el.date.strftime('%Y/%m/%d %H:%M') }}</b></p>
+      <p><b>Автор: <span style="color: {{ el.author.roleColor }};">{{ el.author.username }}</span></b></p>
+      <a class="btn btn-warning" href="/blog/{{ el.id }}">Читать</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

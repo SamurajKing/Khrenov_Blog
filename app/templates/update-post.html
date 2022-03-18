@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+  <h1>Редактирование статьи</h1>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.title(size=64, class="form-control", placeholder="Введите заголовок") }}
+    </p>
+    <p>
+      {{ form.intro(size=256, class="form-control", placeholder="Введите интро") }}
+    </p>
+    <p>
+      {{ form.text(class="form-control", placeholder="Введите текст статьи") }}
+    </p>
+
+    <p>{{ form.submit(class="btn btn-success", value="Сохранить!") }}</p>
+  </form>
+</div>
+{% endblock %}

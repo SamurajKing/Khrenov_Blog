@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h1>Вход</h1>
+  <p>
+    {% with messages = get_flashed_messages() %}
+           {% if messages %}
+           <ul>
+               {% for message in messages %}
+               <li style="list-style-type: none; color: {% if message[0] == 'C'%} green {% else %} red {% endif %}; margin-left:-30px;">{{ message }}</li>
+               {% endfor %}
+           </ul>
+           {% endif %}
+    {% endwith %}
+  </p>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.username(size=64, class="form-control", placeholder="Введите логин") }}
+    </p>
+    <p>
+      {{ form.password(size=255, class="form-control", placeholder="Введите пароль") }}
+    </p>
+    <p>{{ form.submit(class="btn btn-success") }}</p>
+  </form>
+  <p>Все еще нет аккаунта? <a href="/register">Зарегистрировать!</a></p>
+</div>
+{% endblock %}
